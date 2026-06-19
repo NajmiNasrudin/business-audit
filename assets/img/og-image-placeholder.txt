@@ -1,0 +1,15 @@
+OG Image Placeholder
+====================
+Create a 1200x630px image for social sharing.
+
+Required content:
+- Background: Forest green (#14392F)
+- 5-bar mark (sage #15B956) — large, centered or left-aligned
+- Headline text: "Audit Bisnes F&B Malaysia" (Fraunces, cream #F4EDD8, large)
+- Subtext: "5 Pillar Diagnostic · Najmi Latif" (Plus Jakarta Sans, smaller)
+- BizBuddy / bizbuddyhq.com URL bottom-right
+
+Save as: og-image.jpg (JPEG, quality 85, 1200x630px)
+
+Also create najmi.jpg (portrait of Najmi — editorial style, dark background, warm lighting).
+Place both files in this /assets/img/ directory.
