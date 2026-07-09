@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "business-audit",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3000", "business-audit"],
+      "port": 3000
+    }
+  ]
+}
