@@ -4,7 +4,7 @@
     {
       "name": "business-audit",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "-p", "3000", "."],
+      "runtimeArgs": ["serve", "-p", "3000", "business-audit"],
       "port": 3000
     }
   ]
