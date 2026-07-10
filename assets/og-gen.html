@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d0d0d; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 20px; font-family: system-ui, sans-serif; }
+  canvas { display: block; box-shadow: 0 24px 80px rgba(0,0,0,0.6); }
+  button { padding: 12px 28px; background: #15B956; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 600; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<button onclick="download()">Download og-image.jpg</button>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+const W = 1200, H = 630;
+
+function rr(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function draw() {
+  // ── Background ──────────────────────────────────────────────
+  ctx.fillStyle = '#0F2820';
+  ctx.fillRect(0, 0, W, H);
+
+  // Radial glow bottom-right
+  let gr = ctx.createRadialGradient(W * 0.82, H * 0.7, 0, W * 0.82, H * 0.7, 500);
+  gr.addColorStop(0,   'rgba(21,185,86,0.18)');
+  gr.addColorStop(1,   'rgba(21,185,86,0)');
+  ctx.fillStyle = gr;
+  ctx.fillRect(0, 0, W, H);
+
+  // Radial glow top-left
+  let gl = ctx.createRadialGradient(0, 0, 0, 0, 0, 400);
+  gl.addColorStop(0,   'rgba(244,237,216,0.06)');
+  gl.addColorStop(1,   'rgba(244,237,216,0)');
+  ctx.fillStyle = gl;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 60) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 60) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // Left content
+  const lx = 80;
+
+  // ── Logo ────────────────────────────────────────────────────
+  const bars = [
+    {x:0,  y:18, w:8, h:20},
+    {x:12, y:8,  w:8, h:30},
+    {x:24, y:13, w:8, h:25},
+    {x:36, y:0,  w:8, h:38},
+    {x:48, y:22, w:5, h:16},
+  ];
+  ctx.fillStyle = '#15B956';
+  bars.forEach(b => ctx.fillRect(lx + b.x, 68 + b.y, b.w, b.h));
+
+  ctx.fillStyle = '#F4EDD8';
+  ctx.font = '600 26px Georgia, serif';
+  ctx.fillText('BizBuddy', lx + 66, 100);
+
+  // ── Divider line ────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(21,185,86,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(lx, 130); ctx.lineTo(lx + 480, 130);
+  ctx.stroke();
+
+  // ── Eyebrow ─────────────────────────────────────────────────
+  ctx.fillStyle = '#15B956';
+  ctx.font = '600 12px monospace';
+  ctx.fillText('BUSINESS AUDIT · NAJMI LATIF', lx, 160);
+
+  // ── Headline ────────────────────────────────────────────────
+  ctx.fillStyle = '#F4EDD8';
+  ctx.font = '700 68px Georgia, serif';
+  ctx.fillText('Audit Bisnes.', lx, 245);
+
+  // Green line
+  ctx.fillStyle = '#15B956';
+  ctx.font = '700 68px Georgia, serif';
+  ctx.fillText('Reveal Bottleneck.', lx, 325);
+
+  ctx.fillStyle = 'rgba(244,237,216,0.75)';
+  ctx.fillText('Fix Yang Betul.', lx, 405);
+
+  // ── Subtext ─────────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(244,237,216,0.45)';
+  ctx.font = '400 18px system-ui, sans-serif';
+  ctx.fillText('Diagnostic 5 pillar · Report PDF · Action Plan 90 hari', lx, 455);
+
+  // ── Pills ───────────────────────────────────────────────────
+  const pills = ['Audit Lite — RM697', 'Standard — RM1,797', 'Pro — RM2,997'];
+  let px = lx;
+  pills.forEach(label => {
+    const tw = ctx.measureText(label).width;
+    const pw = tw + 28, ph = 30;
+    rr(px, 490, pw, ph, 15);
+    ctx.fillStyle = 'rgba(21,185,86,0.15)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(21,185,86,0.4)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(244,237,216,0.7)';
+    ctx.font = '500 13px system-ui, sans-serif';
+    ctx.fillText(label, px + 14, 490 + 20);
+    px += pw + 10;
+  });
+
+  // ── Score Card ──────────────────────────────────────────────
+  const cardX = 730, cardY = 60, cardW = 400, cardH = 510;
+
+  // Card shadow
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 60;
+  ctx.shadowOffsetY = 20;
+  ctx.fillStyle = '#fff';
+  rr(cardX, cardY, cardW, cardH, 24);
+  ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+  // Card header
+  ctx.fillStyle = '#14392F';
+  rr(cardX, cardY, cardW, 80, 24);
+  ctx.fill();
+  ctx.fillRect(cardX, cardY + 56, cardW, 24); // square bottom
+
+  ctx.fillStyle = '#F4EDD8';
+  ctx.font = '700 14px Georgia, serif';
+  ctx.fillText('SKOR AUDIT BISNES', cardX + 24, cardY + 32);
+
+  ctx.fillStyle = 'rgba(244,237,216,0.45)';
+  ctx.font = '400 12px monospace';
+  ctx.fillText('5 PILLAR FRAMEWORK · BIZBUDDY', cardX + 24, cardY + 56);
+
+  // Score donut
+  const scx = cardX + cardW / 2;
+  const scy = cardY + 80 + 90;
+  const sr  = 72;
+
+  // Track
+  ctx.strokeStyle = 'rgba(21,185,86,0.12)';
+  ctx.lineWidth = 16;
+  ctx.beginPath();
+  ctx.arc(scx, scy, sr, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Fill arc
+  ctx.strokeStyle = '#15B956';
+  ctx.lineWidth = 16;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(scx, scy, sr, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * 0.68);
+  ctx.stroke();
+  ctx.lineCap = 'butt';
+
+  // Score number
+  ctx.fillStyle = '#14392F';
+  ctx.font = '700 52px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('68', scx, scy + 18);
+  ctx.fillStyle = 'rgba(74,74,74,0.5)';
+  ctx.font = '400 14px system-ui, sans-serif';
+  ctx.fillText('daripada 100', scx, scy + 42);
+  ctx.textAlign = 'left';
+
+  // Status badge
+  ctx.fillStyle = 'rgba(245,158,11,0.1)';
+  rr(scx - 54, scy + 56, 108, 26, 13);
+  ctx.fill();
+  ctx.fillStyle = '#d97706';
+  ctx.font = '600 12px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('⚠ Perlu Perhatian', scx, scy + 73);
+  ctx.textAlign = 'left';
+
+  // Pillars
+  const pillars = [
+    { name: 'Acquisition',  score: 58, color: '#f59e0b' },
+    { name: 'Retention',    score: 72, color: '#15B956'  },
+    { name: 'Operations',   score: 81, color: '#15B956'  },
+    { name: 'Finance',      score: 44, color: '#ef4444'  },
+    { name: 'Leadership',   score: 65, color: '#f59e0b'  },
+  ];
+
+  const bStartY = cardY + 322;
+  const bLeft   = cardX + 24;
+  const bRight  = cardX + cardW - 24;
+
+  pillars.forEach((p, i) => {
+    const y   = bStartY + i * 38;
+    const bx  = bLeft + 108;
+    const bw  = bRight - bx - 36;
+
+    // Label
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = '500 13px system-ui, sans-serif';
+    ctx.fillText(p.name, bLeft, y + 14);
+
+    // Track
+    ctx.fillStyle = '#f3f4f6';
+    rr(bx, y, bw, 18, 9);
+    ctx.fill();
+
+    // Fill
+    ctx.fillStyle = p.color;
+    rr(bx, y, bw * (p.score / 100), 18, 9);
+    ctx.fill();
+
+    // Score label
+    ctx.fillStyle = '#4A4A4A';
+    ctx.font = '700 13px system-ui, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(p.score, bRight, y + 14);
+    ctx.textAlign = 'left';
+  });
+
+  // ── Bottom bar ──────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(21,185,86,0.1)';
+  ctx.fillRect(0, H - 48, W, 48);
+
+  // Sage accent line
+  ctx.fillStyle = '#15B956';
+  ctx.fillRect(0, H - 48, W, 3);
+
+  ctx.fillStyle = 'rgba(244,237,216,0.55)';
+  ctx.font = '500 17px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('bizbuddyhq.com/business-audit', W / 2, H - 14);
+  ctx.textAlign = 'left';
+}
+
+function download() {
+  const a = document.createElement('a');
+  a.download = 'og-image.jpg';
+  a.href = c.toDataURL('image/jpeg', 0.93);
+  a.click();
+}
+
+draw();
+</script>
+</body>
+</html>
