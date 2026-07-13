@@ -29,9 +29,9 @@ $PRODUCTS = [
     ],
     'coaching-zoom' => [
         'id'          => 'coaching-zoom',
-        'name'        => 'Zoom Coaching',
+        'name'        => 'Online Coaching',
         'price'       => 350,
-        'description' => 'Coaching 1-on-1 dengan Najmi — 2 jam atas Zoom. Audit 5 pillar business anda, priority ranking, follow-up notes.',
+        'description' => 'Coaching 1-on-1 dengan Najmi — 2 jam online. Audit 5 pillar business anda, priority ranking, follow-up notes.',
         'available'   => true,
         'group'       => 'coaching',
     ],
