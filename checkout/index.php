@@ -1,4 +1,9 @@
-<?php require_once __DIR__ . '/config.php'; ?>
+<?php
+require_once __DIR__ . '/config.php';
+// Show only one product group (default 'audit'); coaching page links with ?g=coaching
+$__group = preg_replace('/[^a-z-]/', '', $_GET['g'] ?? 'audit');
+$PRODUCTS = array_filter($PRODUCTS, fn($p) => ($p['group'] ?? 'audit') === $__group);
+?>
 <!DOCTYPE html>
 <html lang="ms">
 <head>

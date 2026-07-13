@@ -27,4 +27,20 @@ $PRODUCTS = [
         'description' => 'Full-day onsite + 30-day follow-up support — comprehensive diagnostic, 1on1 coaching + 1 staff, WhatsApp access.',
         'available'   => true,
     ],
+    'coaching-zoom' => [
+        'id'          => 'coaching-zoom',
+        'name'        => 'Zoom Coaching',
+        'price'       => 350,
+        'description' => 'Coaching 1-on-1 dengan Najmi — 2 jam atas Zoom. Audit 5 pillar business anda, priority ranking, follow-up notes.',
+        'available'   => true,
+        'group'       => 'coaching',
+    ],
+    'coaching-onsite' => [
+        'id'          => 'coaching-onsite',
+        'name'        => 'On-Site Coaching',
+        'price'       => 1000,
+        'description' => 'Coaching 1-on-1 face-to-face di Setia Alam — 3-4 jam. Bedah data anda deep, kopi break, follow-up notes.',
+        'available'   => true,
+        'group'       => 'coaching',
+    ],
 ];
