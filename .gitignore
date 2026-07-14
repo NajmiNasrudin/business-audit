@@ -1,3 +1,6 @@
 node_modules/
 .DS_Store
 Thumbs.db
+
+# Server-only config — NEVER commit real credentials
+checkout/config.php

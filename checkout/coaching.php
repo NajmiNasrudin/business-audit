@@ -34,10 +34,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name  = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $phone = preg_replace('/[^0-9+]/', '', $_POST['phone'] ?? '');
+    $agree = ($_POST['agree_terms'] ?? '') === 'on';
     $keep  = http_build_query(['p' => $p, 'name' => $name, 'email' => $email, 'phone' => $phone]);
 
     if ($name === '' || $phone === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         header('Location: coaching.php?error=invalid&' . $keep);
+        exit;
+    }
+    if (!$agree) {
+        header('Location: coaching.php?error=terms&' . $keep);
         exit;
     }
 
@@ -116,6 +121,10 @@ input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(21,
 .pays b{font-weight:600;color:var(--muted);}
 .chip{border:1px solid var(--border);border-radius:7px;padding:3px 9px;font-size:11.5px;font-weight:600;color:var(--muted);}
 .ssl{text-align:center;font-size:12px;color:var(--dim);margin-top:16px;}
+.agree{display:flex;align-items:flex-start;gap:10px;margin:18px 0 0;font-size:13.5px;font-weight:400;color:var(--muted);line-height:1.5;cursor:pointer;}
+.agree input{width:auto;flex:none;margin-top:2px;accent-color:var(--brand);cursor:pointer;}
+.agree a{color:var(--brand-dark);font-weight:600;text-decoration:none;}
+.agree a:hover{text-decoration:underline;}
 /* summary (dark) */
 .sum{background:var(--ink);color:#fff;border:none;position:sticky;top:20px;}
 .sum-eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8FE9B4;margin-bottom:14px;}
@@ -169,6 +178,8 @@ input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(21,
         <div class="err">Ada maklumat tak lengkap atau tak sah. Sila semak semula nama, email &amp; nombor.</div>
       <?php elseif ($err === 'chip'): ?>
         <div class="err">Ada masalah dengan payment gateway. Cuba lagi, atau WhatsApp saya.</div>
+      <?php elseif ($err === 'terms'): ?>
+        <div class="err">Sila tick bahawa anda bersetuju dengan Terma &amp; Polisi sebelum proceed.</div>
       <?php endif; ?>
 
       <form action="coaching.php" method="post" autocomplete="on">
@@ -179,6 +190,10 @@ input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(21,
         <input type="email" id="email" name="email" required maxlength="120" autocomplete="email" placeholder="email@anda.com" value="<?= htmlspecialchars($_GET['email'] ?? '') ?>">
         <label for="phone">Nombor WhatsApp</label>
         <input type="tel" id="phone" name="phone" required maxlength="20" autocomplete="tel" placeholder="01X-XXXXXXX" value="<?= htmlspecialchars($_GET['phone'] ?? '') ?>">
+        <label class="agree">
+          <input type="checkbox" id="agree_terms" name="agree_terms" required>
+          <span>Saya faham dan bersetuju dengan <a href="/coaching/terma-polisi.html" target="_blank" rel="noopener">Terma &amp; Polisi Coaching</a>.</span>
+        </label>
         <button type="submit" class="btn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Bayar <?= $price ?> ke CHIP
